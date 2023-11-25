@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { userServices } from "./user.service";
-import { userModel } from "./user.model";
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -93,9 +92,32 @@ const getUserById = async (req: Request, res: Response) => {
 //     });
 //   }
 // };
-const deleteUser = async (userId: number) => {
-  const result = await userModel.updateOne({ userId }, { isDeleted: true });
-  return result;
+
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const users = await userServices.deletedUser(Number(userId));
+
+    if (!users) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User Deleted Succesfully",
+      data: users,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: err,
+    });
+  }
 };
 
 export const UserController = {

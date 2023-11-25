@@ -76,13 +76,15 @@ const userSchema = new Schema<user>(
     },
   },
 );
+
 userSchema.pre("find", function (next) {
-  this.find({ isDeleted: { $ne: true } });
+  this.where({ isDeleted: { $ne: true }, isActive: "active" });
   next();
 });
 
 userSchema.pre("findOne", function (next) {
-  this.find({ isDeleted: { $ne: true } });
+  this.where({ isDeleted: { $ne: true }, isActive: "active" });
   next();
 });
+
 export const userModel = model<user>("user", userSchema);

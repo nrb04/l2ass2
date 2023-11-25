@@ -20,7 +20,7 @@ const updateUserdata = async (userId: number) => {
   return users;
 };
 const deletedUser = async (userId: number) => {
-  const users = await userModel.findOne({ userId }, { isdeleted: true });
+  const users = await userModel.updateOne({ userId }, { isdeleted: true });
   return users;
 };
 

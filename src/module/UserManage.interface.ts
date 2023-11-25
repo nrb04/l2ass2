@@ -15,7 +15,7 @@ export type user = {
   password: string;
   age: number;
   email: string;
-  isActive: "active" | "blocked";
+  isActive: string;
   hobbies: string[];
   address: address;
   isdeleted: boolean;
