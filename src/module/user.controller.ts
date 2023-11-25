@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { userServices } from "./user.service";
+import { userModel } from "./user.model";
 
 const createUser = async (req: Request, res: Response) => {
   try {
@@ -41,10 +42,10 @@ const getAllUsers = async (req: Request, res: Response) => {
 
 const getUserById = async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.userId, 10);
-    const user = await userServices.getUserById(userId);
+    const { userId } = req.params;
+    const users = await userServices.getUserById(Number(userId));
 
-    if (!user) {
+    if (!users) {
       return res.status(404).json({
         success: false,
         message: "User not found",
@@ -53,7 +54,7 @@ const getUserById = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      data: user,
+      data: users,
     });
   } catch (err) {
     console.error(err);
@@ -65,65 +66,43 @@ const getUserById = async (req: Request, res: Response) => {
   }
 };
 
-const updateUser = async (req: Request, res: Response) => {
-  try {
-    const userId = parseInt(req.params.userId, 10);
-    const updatedUserData = req.body;
-    const updatedUser = await userServices.updateUser(userId, updatedUserData);
+// const updateUser = async (req: Request, res: Response) => {
+//   try {
+//     const userId = parseInt(req.params.userId, 10);
+//     const updatedUserData = req.body;
+//     const updatedUser = await userServices.updateUser(userId, updatedUserData);
 
-    if (!updatedUser) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
+//     if (!updatedUser) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User not found",
+//       });
+//     }
 
-    res.status(200).json({
-      success: true,
-      message: "User updated successfully",
-      data: updatedUser,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-      error: err,
-    });
-  }
-};
-
-const deleteUser = async (req: Request, res: Response) => {
-  try {
-    const userId = parseInt(req.params.userId, 10);
-    const deletedUser = await userServices.deleteUser(userId);
-
-    if (!deletedUser) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: "User deleted successfully",
-      data: deletedUser,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-      error: err,
-    });
-  }
+//     res.status(200).json({
+//       success: true,
+//       message: "User updated successfully",
+//       data: updatedUser,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({
+//       success: false,
+//       message: "Internal Server Error",
+//       error: err,
+//     });
+//   }
+// };
+const deleteUser = async (userId: number) => {
+  const result = await userModel.updateOne({ userId }, { isDeleted: true });
+  return result;
 };
 
 export const UserController = {
   createUser,
   getAllUsers,
   getUserById,
-  updateUser,
+  //   updateUser,
+
   deleteUser,
 };

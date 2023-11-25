@@ -7,6 +7,7 @@ export type fullName = {
   firstName: string;
   lastName: string;
 };
+
 export type user = {
   userId: number;
   fullName: fullName;
@@ -17,4 +18,5 @@ export type user = {
   isActive: "active" | "blocked";
   hobbies: string[];
   address: address;
+  isdeleted: boolean;
 };

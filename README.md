@@ -1,1 +1,1 @@
-# l2ass2
+# https://l2ass2.vercel.app/

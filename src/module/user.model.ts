@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { address, fullName, user } from "./UserManage.interface";
 
-// Address Schema
 const addressSchema = new Schema<address>({
   street: {
     type: String,
@@ -9,7 +8,7 @@ const addressSchema = new Schema<address>({
   },
   city: {
     type: String,
-    required: true, // Assuming city is also required
+    required: true,
   },
   country: {
     type: String,
@@ -17,7 +16,6 @@ const addressSchema = new Schema<address>({
   },
 });
 
-// Full Name Schema
 const fullNameSchema = new Schema<fullName>({
   firstName: {
     type: String,
@@ -29,42 +27,62 @@ const fullNameSchema = new Schema<fullName>({
   },
 });
 
-// User Schema
-const userSchema = new Schema<user>({
-  address: addressSchema,
-  fullName: fullNameSchema,
-  userId: {
-    type: Number,
-    required: true,
-    unique: true,
+const userSchema = new Schema<user>(
+  {
+    address: addressSchema,
+    fullName: fullNameSchema,
+    userId: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      select: false,
+    },
+    age: {
+      type: Number,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: [true, "Email is Required"],
+      unique: true,
+    },
+    isActive: {
+      type: String,
+      enum: ["active", "blocked"],
+      default: "active",
+    },
+    hobbies: {
+      type: [String], // Array of strings
+    },
+    isdeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  username: {
-    type: String,
-    required: true,
-    unique: true,
+  {
+    toJSON: {
+      transform: function (doc, ret) {
+        delete ret.password;
+      },
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  age: {
-    type: Number,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  isActive: {
-    type: String,
-    enum: ["active", "blocked"],
-    default: "active",
-  },
-  hobbies: {
-    type: [String], // Array of strings
-  },
+);
+userSchema.pre("find", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
 });
 
-// User Model
+userSchema.pre("findOne", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
 export const userModel = model<user>("user", userSchema);

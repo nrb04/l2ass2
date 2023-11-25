@@ -12,30 +12,22 @@ const getAllUsers = async () => {
 };
 
 const getUserById = async (userId: number) => {
-  const user = await userModel.findById(userId);
-  return user;
+  const users = await userModel.findOne({ userId });
+  return users;
 };
-
-const updateUser = async (userId: number, updatedUserData: Partial<user>) => {
-  const updatedUser = await userModel.findByIdAndUpdate(
-    userId,
-    updatedUserData,
-    {
-      new: true,
-    },
-  );
-  return updatedUser;
+const updateUserdata = async (userId: number) => {
+  const users = await userModel.findOne({ userId });
+  return users;
 };
-
-const deleteUser = async (userId: number) => {
-  const deletedUser = await userModel.findByIdAndDelete(userId);
-  return deletedUser;
+const deletedUser = async (userId: number) => {
+  const users = await userModel.findOne({ userId }, { isdeleted: true });
+  return users;
 };
 
 export const userServices = {
   createUserIntoDB,
   getAllUsers,
   getUserById,
-  updateUser,
-  deleteUser,
+  updateUserdata,
+  deletedUser,
 };
