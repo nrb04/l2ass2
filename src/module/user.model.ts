@@ -56,14 +56,13 @@ const userSchema = new Schema<user>(
       unique: true,
     },
     isActive: {
-      type: String,
-      enum: ["active", "blocked"],
-      default: "active",
+      type: Boolean,
+      default: true,
     },
     hobbies: {
       type: [String], // Array of strings
     },
-    isdeleted: {
+    isDeleted: {
       type: Boolean,
       default: false,
     },
@@ -78,12 +77,12 @@ const userSchema = new Schema<user>(
 );
 
 userSchema.pre("find", function (next) {
-  this.where({ isDeleted: { $ne: true }, isActive: "active" });
+  this.where({ isDeleted: { $ne: true } });
   next();
 });
 
 userSchema.pre("findOne", function (next) {
-  this.where({ isDeleted: { $ne: true }, isActive: "active" });
+  this.where({ isDeleted: { $ne: true } });
   next();
 });
 

@@ -15,8 +15,8 @@ export type user = {
   password: string;
   age: number;
   email: string;
-  isActive: string;
+  isActive: boolean;
   hobbies: string[];
   address: address;
-  isdeleted: boolean;
+  isDeleted: boolean;
 };
