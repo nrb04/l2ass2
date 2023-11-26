@@ -30,5 +30,4 @@ export const userServices = {
   getUserById,
   updateUserdata,
   deletedUser,
-  orderupdated,
 };
