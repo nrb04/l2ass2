@@ -15,8 +15,8 @@ const getUserById = async (userId: number) => {
   const users = await userModel.findOne({ userId });
   return users;
 };
-const updateUserdata = async (userId: number) => {
-  const users = await userModel.findOne({ userId });
+const updateUserdata = async (userId: number, user: user) => {
+  const users = await userModel.updateOne({ userId }, user);
   return users;
 };
 const deletedUser = async (userId: number) => {

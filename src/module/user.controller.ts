@@ -65,33 +65,34 @@ const getUserById = async (req: Request, res: Response) => {
   }
 };
 
-// const updateUser = async (req: Request, res: Response) => {
-//   try {
-//     const userId = parseInt(req.params.userId, 10);
-//     const updatedUserData = req.body;
-//     const updatedUser = await userServices.updateUser(userId, updatedUserData);
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const id = req.params.userId; // Assuming userId is a number
+    const { users } = req.body;
 
-//     if (!updatedUser) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "User not found",
-//       });
-//     }
+    const updatedUser = await userServices.updateUserdata(Number(id), users);
 
-//     res.status(200).json({
-//       success: true,
-//       message: "User updated successfully",
-//       data: updatedUser,
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({
-//       success: false,
-//       message: "Internal Server Error",
-//       error: err,
-//     });
-//   }
-// };
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      data: updatedUser,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: err,
+    });
+  }
+};
 
 const deleteUser = async (req: Request, res: Response) => {
   try {
@@ -124,7 +125,6 @@ export const UserController = {
   createUser,
   getAllUsers,
   getUserById,
-  //   updateUser,
-
+  updateUser,
   deleteUser,
 };
